@@ -26,6 +26,11 @@ install:
 	$(INSTALL) -m 644 lib/resty/markdown.lua $(LUA_LIB_MAIN)
 	$(INSTALL) -m 644 lib/resty/hoedown/*.lua $(LUA_LIB_DIR)
 	$(INSTALL) -m 755 $(TARGET) $(LUA_SO_DIR)
+	@echo "Installed $(TARGET) to $(LUA_SO_DIR)"
+	@echo "Installed Lua files to $(LUA_LIB_MAIN) and $(LUA_LIB_DIR)"
+	@echo "Installation complete."
+	@echo "You can check the installation by running the following command:"
+	@echo "resty -e 'require \"resty.hoedown\"'"
 
 # Clean up build artifacts
 clean:

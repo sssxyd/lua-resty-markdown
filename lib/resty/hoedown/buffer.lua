@@ -1,4 +1,4 @@
-local lib          = require "resty.markdown.library"
+local lib          = require "resty.hoedown.library"
 local ffi          = require "ffi"
 local ffi_gc       = ffi.gc
 local ffi_str      = ffi.string

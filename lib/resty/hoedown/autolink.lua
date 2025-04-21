@@ -1,4 +1,4 @@
-require "resty.markdown.buffer"
+require "resty.hoedown.buffer"
 local ffi      = require "ffi"
 local ffi_cdef = ffi.cdef
 

@@ -1,5 +1,5 @@
-local document = require "resty.markdown.document"
-local html     = require "resty.markdown.html"
+local document = require "resty.hoedown.document"
+local html     = require "resty.hoedown.html"
 local type         = type
 
 local _M = {}

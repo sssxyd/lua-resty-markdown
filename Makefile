@@ -1,12 +1,12 @@
 # Variables
 CC = gcc
 OPENRESTY_HOME ?= /usr/local/openresty
-LUA_LIB_MAIN = $(OPENRESTY_HOME)/site/lualib/resty/markdown.lua
-LUA_LIB_DIR = $(OPENRESTY_HOME)/site/lualib/resty/hoedown
-LUA_SO_DIR = $(OPENRESTY_HOME)/site/lualib
+LUA_LIB_MAIN = $(OPENRESTY_HOME)/lualib/resty/markdown.lua
+LUA_LIB_DIR = $(OPENRESTY_HOME)/lualib/resty/hoedown
+LUA_SO_DIR = $(OPENRESTY_HOME)/lualib
 CFLAGS = -O2 -fPIC -I./src
 LDFLAGS = -shared
-TARGET = hoedown.so
+TARGET = libhoedown.so
 SRC = $(wildcard src/*.c)
 INSTALL = install
 

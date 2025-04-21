@@ -30,7 +30,7 @@ install:
 	@echo "Installed Lua files to $(LUA_LIB_MAIN) and $(LUA_LIB_DIR)"
 	@echo "Installation complete."
 	@echo "You can check the installation by running the following command:"
-	@echo "resty -e 'require \"resty.hoedown\"'"
+	@echo "resty -e 'require \"resty.markdown\"'"
 
 # Clean up build artifacts
 clean:

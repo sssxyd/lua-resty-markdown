@@ -31,10 +31,11 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -shared")
 add_library(${TARGET} SHARED ${SRC})
 
 # 安装目标
-COMMAND ${CMAKE_COMMAND} -E echo "Installing ${TARGET} to ${LUA_SO_DIR}"
+message(STATUS "Installing ${TARGET} to ${LUA_SO_DIR}")
 install(TARGETS ${TARGET} DESTINATION ${LUA_SO_DIR})
-COMMAND ${CMAKE_COMMAND} -E echo "Installing Lua module to ${LUA_LIB_DIR}"
+message(STATUS "Installing Lua module to ${LUA_LIB_DIR}")
 install(FILES lib/resty/markdown.lua DESTINATION ${LUA_LIB_DIR})
+message(STATUS "Installing hoedown directory to ${LUA_LIB_DIR}")
 install(DIRECTORY lib/resty/hoedown DESTINATION ${LUA_LIB_DIR})
 
 add_custom_target(uninstall

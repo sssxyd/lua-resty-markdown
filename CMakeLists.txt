@@ -37,6 +37,9 @@ message(STATUS "Installing Lua module to ${LUA_LIB_DIR}")
 install(FILES lib/resty/markdown.lua DESTINATION ${LUA_LIB_DIR})
 message(STATUS "Installing hoedown directory to ${LUA_LIB_DIR}")
 install(DIRECTORY lib/resty/hoedown DESTINATION ${LUA_LIB_DIR})
+message(STATUS "Installation complete.")
+message(STATUS "You should run 'openresty -s reload' to apply the changes.")
+message(STATUS "You can test with 'resty -e \"require(\"resty.markdown\")\"'")
 
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -E echo "Removing ${LUA_LIB_DIR}/markdown.lua"

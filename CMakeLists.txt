@@ -39,7 +39,7 @@ install(CODE "
         COMMAND echo \"Replacing ffi_load in library.lua...\"
     )
     execute_process(
-        COMMAND sed -i 's|return ffi_load \"hoedown\"|return ffi_load \"${OPENRESTY_HOME}/lualib/libhoedown.so\"|' ${LUA_LIB_DIR}/hoedown/library.lua
+        COMMAND sed -i \"s|return ffi_load \\\"hoedown\\\"|return ffi_load \\\"${OPENRESTY_HOME}/lualib/libhoedown.so\\\"|\" ${LUA_LIB_DIR}/hoedown/library.lua
         RESULT_VARIABLE result
     )
     if(NOT result EQUAL 0)

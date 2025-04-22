@@ -36,13 +36,6 @@ install(TARGETS ${TARGET} DESTINATION ${LUA_SO_DIR})
 install(FILES lib/resty/markdown.lua DESTINATION ${LUA_LIB_MAIN})
 install(DIRECTORY lib/resty/hoedown/ DESTINATION ${LUA_LIB_DIR})
 
-# 自定义清理目标
-add_custom_target(clean
-    COMMAND ${CMAKE_COMMAND} -E remove -f "${CMAKE_BINARY_DIR}/*.o"
-    COMMAND ${CMAKE_COMMAND} -E remove -f "${CMAKE_BINARY_DIR}/*.so"
-    COMMENT "Cleaning up build artifacts"
-)
-
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -E remove -f ${LUA_LIB_MAIN}
     COMMAND ${CMAKE_COMMAND} -E remove_directory ${LUA_LIB_DIR}

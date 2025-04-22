@@ -16,8 +16,7 @@ if(NOT OPENRESTY_HOME)
 endif()
 
 # 设置变量
-set(LUA_LIB_MAIN "${OPENRESTY_HOME}/lualib/resty/markdown.lua")
-set(LUA_LIB_DIR "${OPENRESTY_HOME}/lualib/resty/hoedown")
+set(LUA_LIB_DIR "${OPENRESTY_HOME}/lualib/resty")
 set(LUA_SO_DIR "${OPENRESTY_HOME}/lualib")
 set(TARGET "hoedown")
 
@@ -32,13 +31,18 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -shared")
 add_library(${TARGET} SHARED ${SRC})
 
 # 安装目标
+COMMAND ${CMAKE_COMMAND} -E echo "Installing ${TARGET} to ${LUA_SO_DIR}"
 install(TARGETS ${TARGET} DESTINATION ${LUA_SO_DIR})
-install(FILES lib/resty/markdown.lua DESTINATION ${LUA_LIB_MAIN})
-install(DIRECTORY lib/resty/hoedown/ DESTINATION ${LUA_LIB_DIR})
+COMMAND ${CMAKE_COMMAND} -E echo "Installing Lua module to ${LUA_LIB_DIR}"
+install(FILES lib/resty/markdown.lua DESTINATION ${LUA_LIB_DIR})
+install(DIRECTORY lib/resty/hoedown DESTINATION ${LUA_LIB_DIR})
 
 add_custom_target(uninstall
-    COMMAND ${CMAKE_COMMAND} -E remove -f ${LUA_LIB_MAIN}
-    COMMAND ${CMAKE_COMMAND} -E remove_directory ${LUA_LIB_DIR}
-    COMMAND ${CMAKE_COMMAND} -E remove -f ${LUA_SO_DIR}/${TARGET}
+    COMMAND ${CMAKE_COMMAND} -E echo "Removing ${LUA_LIB_DIR}/markdown.lua"
+    COMMAND ${CMAKE_COMMAND} -E remove -f ${LUA_LIB_DIR}/markdown.lua
+    COMMAND ${CMAKE_COMMAND} -E echo "Removing directory ${LUA_LIB_DIR}/hoedown"
+    COMMAND ${CMAKE_COMMAND} -E remove_directory ${LUA_LIB_DIR}/hoedown
+    COMMAND ${CMAKE_COMMAND} -E echo "Removing ${LUA_SO_DIR}/lib${TARGET}.so"
+    COMMAND ${CMAKE_COMMAND} -E remove -f ${LUA_SO_DIR}/lib${TARGET}.so
     COMMENT "Uninstalling Lua modules and shared library"
 )

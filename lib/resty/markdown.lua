@@ -1,5 +1,6 @@
 local document = require "resty.hoedown.document"
 local html     = require "resty.hoedown.html"
+local ver  = require "resty.hoedown.version"
 local type         = type
 
 local _M = {}
@@ -140,6 +141,12 @@ _M.htmlToc = function(markdown, max_nesting, toc_nesting, smartypants)
         extensions = extensions,
         smartypants = smartypants
     })
+end
+
+--- return hoedown version_number
+-- @return (string) The version number of the hoedown library.
+_M.version = function ()
+    return ver.version
 end
 
 return _M

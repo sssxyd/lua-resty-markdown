@@ -19,7 +19,7 @@ endif()
 set(LUA_LIB_MAIN "${OPENRESTY_HOME}/lualib/resty/markdown.lua")
 set(LUA_LIB_DIR "${OPENRESTY_HOME}/lualib/resty/hoedown")
 set(LUA_SO_DIR "${OPENRESTY_HOME}/lualib")
-set(TARGET "libhoedown.so")
+set(TARGET "hoedown")
 
 # 源文件
 file(GLOB SRC "src/*.c")

@@ -104,7 +104,7 @@ end
 --         - Converting " to curly quotes (“”).
 --         - Converting -- to an em dash (—).
 -- @return (string) The converted HTML TOC string.
-_M.htmlToc = function(markdown, max_nesting, toc_nesting, smartypants)
+_M.toc = function(markdown, max_nesting, toc_nesting, smartypants)
     -- Enable all extensions by default
     local extensions = {
         "tables",               -- Table extension
@@ -141,6 +141,56 @@ _M.htmlToc = function(markdown, max_nesting, toc_nesting, smartypants)
         extensions = extensions,
         smartypants = smartypants
     })
+end
+
+--- Renders Markdown content to HTML and returns a complete HTML document.
+-- @param markdown (string) Markdown content.
+-- @param title (string) Title of the HTML document (optional, default is "markdown").
+-- @param stylesheet/css (string) URL of the CSS stylesheet (optional, default is a GitHub Markdown CSS).
+-- @param max_nesting (number) Maximum nesting depth (optional, default is 16).
+-- @param smartypants (boolean) Whether to enable Smartypants functionality (optional, default is true).
+--       - Smartypants converts ordinary punctuation into typographically correct symbols, such as:
+--         - Converting " to curly quotes (“”).
+--         - Converting -- to an em dash (—).
+-- @return (string) The complete HTML document.
+_M.render = function()
+    local uri = ngx.var.uri
+    local match = ngx.re.match(uri, "([^/]+)%.md$", "jo")
+    local filename = (match and match[1]) or "markdown"
+    if filename:find("[/\\]") then
+        filename = "markdown"
+        ngx.log(ngx.WARN, "invalid uri: ", uri)
+    end
+
+    local args = ngx.req.get_uri_args()
+    local title = args.title or ngx.unescape_uri(filename):gsub("-", " ")
+    local stylesheet = args.stylesheet or args.css or "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css"
+    local max_nesting = args.max_nesting or 16
+    local smartypants = args.smartypants or true
+
+    local ok, md_html = pcall(_M.html, ngx.arg[1], max_nesting, smartypants)
+    if not ok then
+        ngx.log(ngx.ERR, "Markdown render failed: ", ngx.arg[1])
+        md_html = "<h1>Render Failed!</h1>"
+    end
+
+    local html_template = [[
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+            <meta name="apple-mobile-web-app-capable" content="yes">
+            <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+            <title>%s</title>
+            <link rel="stylesheet" href="%s">
+        </head>
+        <body class="markdown-body">
+            <div id="content">%s</div>
+        </body>
+        </html>
+    ]]
+    return string.format(html_template, title, stylesheet, md_html)
 end
 
 --- return hoedown version_number

@@ -31,15 +31,27 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -shared")
 add_library(${TARGET} SHARED ${SRC})
 
 # 安装目标
-message(STATUS "Installing ${TARGET} to ${LUA_SO_DIR}")
 install(TARGETS ${TARGET} DESTINATION ${LUA_SO_DIR})
-message(STATUS "Installing Lua module to ${LUA_LIB_DIR}")
 install(FILES lib/resty/markdown.lua DESTINATION ${LUA_LIB_DIR})
-message(STATUS "Installing hoedown directory to ${LUA_LIB_DIR}")
 install(DIRECTORY lib/resty/hoedown DESTINATION ${LUA_LIB_DIR})
-message(STATUS "Installation complete.")
-message(STATUS "You should run 'openresty -s reload' to apply the changes.")
-message(STATUS "You can test with 'resty -e \"require(\"resty.markdown\")\"'")
+install(CODE "
+    execute_process(
+        COMMAND echo \"Replacing ffi_load in library.lua...\"
+    )
+    execute_process(
+        COMMAND sed -i 's|return ffi_load \"hoedown\"|return ffi_load \"${OPENRESTY_HOME}/lualib/libhoedown.so\"|' ${LUA_LIB_DIR}/hoedown/library.lua
+        RESULT_VARIABLE result
+    )
+    if(NOT result EQUAL 0)
+        message(FATAL_ERROR \"Failed to replace ffi_load in library.lua\")
+    endif()
+    execute_process(
+        COMMAND echo \"You should run 'openresty -s reload' to apply the changes.\"
+    )
+    execute_process(
+        COMMAND echo \"Installation complete!\"
+    )
+")
 
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -E echo "Removing ${LUA_LIB_DIR}/markdown.lua"

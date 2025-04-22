@@ -25,12 +25,12 @@ install:
 	$(INSTALL) -d $(LUA_LIB_DIR)
 	$(INSTALL) -m 644 lib/resty/markdown.lua $(LUA_LIB_MAIN)
 	$(INSTALL) -m 644 lib/resty/hoedown/*.lua $(LUA_LIB_DIR)
+	sed -i 's|return ffi_load "hoedown"|return ffi_load "$(OPENRESTY_HOME)/lualib/libhoedown.so"|' $(LUA_LIB_DIR)/library.lua
 	$(INSTALL) -m 755 $(TARGET) $(LUA_SO_DIR)
 	@echo "Installed $(TARGET) to $(LUA_SO_DIR)"
 	@echo "Installed Lua files to $(LUA_LIB_MAIN) and $(LUA_LIB_DIR)"
+	@echo "You should run 'openresty -s reload' to apply the changes."
 	@echo "Installation complete."
-	@echo "You can check the installation by running the following command:"
-	@echo "resty -e 'require \"resty.markdown\"'"
 
 # Clean up build artifacts
 clean:
